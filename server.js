@@ -31,8 +31,8 @@ app.post('/gerar-pix', async (req, res) => {
                 }
             }
         );
-
-        const { id, qr_code_base64, status } = response.data;
+const { id, status, point_of_interaction } = response.data;
+const qr_code_base64 = point_of_interaction?.transaction_data?.qr_code_base64;
 
         pagamentos[id] = {
             pago: false,
