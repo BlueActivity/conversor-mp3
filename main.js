@@ -169,7 +169,8 @@ downloadBtn.addEventListener('click', async function(e) {
             body: JSON.stringify({ arquivo: downloadBtn.download })
         });
         const { id, qrCode } = await res.json();
-        qrCodeImg.src = qrCode;
+        qrCodeImg.src = `data:image/png;base64,${qrCode}`;
+
         // Polling para checar pagamento
         if (pollingInterval) clearInterval(pollingInterval);
         pollingInterval = setInterval(async () => {
