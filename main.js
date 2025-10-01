@@ -163,7 +163,7 @@ downloadBtn.addEventListener('click', async function(e) {
         qrCodeImg.src = '';
         audioPreview.style.display = 'none';
         // Chame seu backend (ajuste a URL se necessário)
-        const res = await fetch('http://localhost:3001/api/pix', {
+        const res = await fetch('http://localhost:3000/api/pix', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ arquivo: downloadBtn.download })
@@ -174,7 +174,7 @@ downloadBtn.addEventListener('click', async function(e) {
         // Polling para checar pagamento
         if (pollingInterval) clearInterval(pollingInterval);
         pollingInterval = setInterval(async () => {
-            const statusRes = await fetch(`http://localhost:3001/api/pix/status/${id}`);
+            const statusRes = await fetch(`http://localhost:3000/api/pix/status/${id}`);
             const { pago } = await statusRes.json();
             if (pago) {
                 clearInterval(pollingInterval);
@@ -192,7 +192,7 @@ downloadBtn.addEventListener('click', async function(e) {
                     aguardandoPagamento.textContent = 'Aguardando pagamento...';
                 }, 1000);
             }
-        }, 3001);
+        }, 3000);
     } catch (err) {
         showError('Erro ao gerar cobrança Pix. Tente novamente.');
         pagamentoArea.style.display = 'none';
