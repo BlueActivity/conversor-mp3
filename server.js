@@ -8,11 +8,16 @@ app.use(cors());
 app.use(express.json());
 
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+// apagar depois
+console.log('🔑 Token carregado:', ACCESS_TOKEN);
+
 const pagamentos = {};
 
-app.post('/gerar-pix', async (req, res) => {
+app.post('/api/pix', async (req, res) => {
     try {
         console.log('🔄 Criando QR Code PIX via Mercado Pago...');
+
+        const idempotencyKey = Date.now().toString(); // ou use uuid
 
         const response = await axios.post(
             'https://api.mercadopago.com/v1/payments',
@@ -27,7 +32,8 @@ app.post('/gerar-pix', async (req, res) => {
             {
                 headers: {
                     Authorization: `Bearer ${ACCESS_TOKEN}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Idempotency-Key': idempotencyKey
                 }
             }
         );
@@ -48,7 +54,7 @@ const qr_code_base64 = point_of_interaction?.transaction_data?.qr_code_base64;
     }
 });
 
-app.get('/status-pix/:id', async (req, res) => {
+app.get('/api/pix/status/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const response = await axios.get(
